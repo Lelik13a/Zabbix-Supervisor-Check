@@ -1,0 +1,6 @@
+#zabbix
+Cmnd_Alias MON = /etc/zabbix/supervisor_check.pl discovery
+Defaults:zabbix !requiretty
+Defaults:zabbix !syslog
+
+zabbix ALL = NOPASSWD: MON

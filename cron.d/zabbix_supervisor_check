@@ -1,0 +1,3 @@
+# supervisor status to zabbix
+
+*/5 *   * * *   root            /etc/zabbix/supervisor_check.pl status > /dev/null 2>&1
