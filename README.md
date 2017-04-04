@@ -6,6 +6,8 @@ Template "Template App Supervisor" finds all supervisor apps, creates new items 
 # Dependencies
 perl, sudo, zabbix-agent, zabbix-sender.
 
+libswitch-perl library.
+
 Installation
 ============
 1. copy supervisor_check.pl to /etc/zabbix/
