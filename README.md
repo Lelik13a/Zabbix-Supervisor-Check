@@ -1,3 +1,6 @@
+# Original: 
+https://github.com/Lelik13a
+
 # Description
 Supervisor daemon and apps monitoring through Zabbix.
 
