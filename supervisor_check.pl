@@ -4,9 +4,13 @@ use strict;
 use Switch;
 
 # --------- base config -------------
-my $ZabbixServer = "1.2.3.4";
-my $HostName = "HostName";
+##my $ZabbixServer = "1.2.3.4";
+##my $HostName = "HostName";
+my $ZConfig = "/etc/zabbix/zabbix_agentd.conf";
+my $ZSender= "/usr/bin/zabbix_sender";
+my $Supervisor = "/usr/local/bin/supervisorctl";
 # ----------------------------------
+
 
 switch ($ARGV[0])
 {
@@ -17,7 +21,7 @@ print "{\n";
 print "\t\"data\":[\n\n";
 
 
-my $result = `/usr/bin/supervisorctl status`;
+my $result = `$Supervisor status`;
 
 my @lines = split /\n/, $result;
 foreach my $l (@lines) {
@@ -38,25 +42,26 @@ print "}\n";
 }
 
 case "status" {
-my $result = `/usr/bin/supervisorctl pid`;
+my $result = `$Supervisor pid`;
 
 if ( $result =~ m/^\d+$/ ) {
-        $result = `/usr/bin/zabbix_sender -z $ZabbixServer -s $HostName -k "supervisor.status" -o "OK"`;
+		$result = `$ZSender -c $ZConfig -k "supervisor.status" -o "OK"`;
         print $result;
 
-        $result = `/usr/bin/supervisorctl status`;
+        $result = `$Supervisor status`;
 
         my @lines = split /\n/, $result;
         foreach my $l (@lines) {
                 my @stat = split / +/, $l;
 
-                $result = `/usr/bin/zabbix_sender -z $ZabbixServer -s $HostName -k "supervisor.check[$stat[0],Status]" -o $stat[1]`;
+		$result = `$ZSender -c $ZConfig -k "supervisor.check[$stat[0],Status]" -o $stat[1]`;
+
                 print $result;
         }
 }
 else {
         # error supervisor not runing
-        $result = `/usr/bin/zabbix_sender -z $ZabbixServer -s $HostName -k "supervisor.status" -o "FAIL"`;
+		$result = `$ZSender -c $ZConfig -k "supervisor.status" -o "FAIL"`;
         print $result;
 }
 
